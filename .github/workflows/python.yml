@@ -1,0 +1,27 @@
+name: Python
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  tox:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        env: [ "3.14", "format", "format_pyproject", "lint", "type" ]
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.14
+    - name: Install tox
+      run: |
+        pip install -U pip
+        pip install -U tox
+    - name: Run tox
+      run: tox -e ${{ matrix.env }}
